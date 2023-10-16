@@ -61,7 +61,7 @@ class SegmentationLabel(Dataset):
         self.class_to_color = {v: k for k, v in self.color_to_class.items()}
         
         for im_f in glob(path.join(seg_dir, '*.png')):
-            self.files.append(os.path.basename(im_f))
+            self.files.append(os.path.basename(im_f).replace('_L.png', ''))
             # self.files.append(im_f.replace('_im.jpg', ''))
 
         self.transform = transform
@@ -72,7 +72,7 @@ class SegmentationLabel(Dataset):
     def __getitem__(self, idx):
         b = self.files[idx]
 
-        lbl = Image.open(self.seg_dir + b)
+        lbl = Image.open(self.seg_dir + b + '_L.png')
 
         lbl = lbl.resize((self.h,self.w))
 
@@ -95,7 +95,7 @@ class SegmentationLabel(Dataset):
         target = target.permute(2, 0, 1)
         target = target.float()
         
-        return target[17]
+        return target[17] #.unsqueeze(0)
 
 class SegmentationImage(Dataset):
     def __init__(self, img_dir, transform=image_transforms.ImgToTensor()):
@@ -111,7 +111,7 @@ class SegmentationImage(Dataset):
         self.w = 128
         
         for im_f in glob(path.join(img_dir, '*.png')):
-            self.files.append(os.path.basename(im_f))
+            self.files.append(os.path.basename(im_f).replace('.png', ''))
             # self.files.append(im_f.replace('_im.jpg', ''))
 
         self.transform = transform
@@ -121,7 +121,7 @@ class SegmentationImage(Dataset):
 
     def __getitem__(self, idx):
         b = self.files[idx]
-        img = Image.open(self.img_dir + b)
+        img = Image.open(self.img_dir + b + '.png')
 
         img = img.resize((self.h,self.w))
 

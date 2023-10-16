@@ -61,6 +61,7 @@ class VertSegLbl(Dataset):
 
         # read image from folders
         self.segmentations = SegmentationLabel(seg_dir=path, map_file=path+"/../"+"class_dict.csv")
+        self.sample_ids = self.segmentations.files
 
     def __getitem__(self, item):
         #need to do this because FATE requires a bottom model even if there is no data on the federate

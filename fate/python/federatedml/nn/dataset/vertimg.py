@@ -61,6 +61,7 @@ class VertSegImg(Dataset):
 
         # read image from folders
         self.segmentations = SegmentationImage(img_dir=path)
+        self.sample_ids = self.segmentations.files
 
     def __getitem__(self, item):
         #need to do this because FATE requires a bottom model even if there is no data on the federate
